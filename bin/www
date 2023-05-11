@@ -94,8 +94,12 @@ const { Server } = require('socket.io');
 const io = new Server(server);
 
 function emitServerStatus(socket) {
-  socket.emit('server-status', { loadavg: os.loadavg() });
-  console.log('server-status event emitted.');
+  const [one, five, fifteen] = os.loadavg();
+
+  socket.emit('server-status', {
+    loadavg: { '1min': one, '5min': five, '15min': fifteen },
+  });
+  console.log('server-status event emmitted.');
 }
 
 io.on('connection', function (socket) {
